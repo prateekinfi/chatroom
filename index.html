@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <title>Chatroom</title>
+    <style>
+        #displayBox li{
+        width: 60%;
+        float: left;
+        list-style: none;  
+        padding:4px;
+        padding-left:10px;
+         border-radius:7px; 
+        margin:10px;
+        background-color:#f2f2f2;      
+        }
+
+        #displayBox{
+        height: 50vh;
+        border: solid 1px #ced4da;
+        overflow: auto;
+         /* #6c757d; */
+        }
+        .container{
+        width:50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12" style="text-align:center;color:#ced4da; ">
+                <h2>Chatroom</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div id='displayBox'></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="input-group mb-3">
+                    <input type="text" id="inputBox" class="form-control" placeholder="Type here.">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" id="sendBtn" style="border-color:#ced4da;" type="button">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script>
+            $(function () {
+                var socket = io();
+                $('#sendBtn').click(function () {
+                   if( $('#inputBox').val()){
+                    socket.emit('chat message', $('#inputBox').val());
+                    $('#displayBox').append($('<li style="background-color: #f7fbff ;float:right;">').text($('#inputBox').val()));
+                    $('#inputBox').val('');
+                   }
+                });
+                socket.on('chat message', function (msg) {
+                    $('#displayBox').append($('<li>').text(msg));
+                    // window.scrollTo(0, document.body.scrollHeight);
+                });
+            });
+        </script>
+</body>
+
+</html>
